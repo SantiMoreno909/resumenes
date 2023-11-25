@@ -37,8 +37,10 @@ Express es un framework, una infraestructura pensada para aplicaciones web y mó
 
 Para instalarlo, debemos escribir `npm install express --save`. Luego, debemos requerir este módulo en el entry point, que generalmente es **app.js**. Esto se hace con las siguientes líneas:
 
-1. `const express = require('express');`
-2. `const app = express();`
+```javascript
+const express = require('express');
+const app = express();
+```
 
 Así, tendremos disponibles todos los métodos disponibles en Express.
 

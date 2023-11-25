@@ -21,7 +21,7 @@ Del lado del cliente encontramos lenguajes como HTML, CSS y JavaScript, meintras
 
 ## Introducción a HTTP
 
-HTTP es el protocolo que regula las conecciones entre Cliente y Servidor. Esto lo hace a través de la **URI**, que es la suma de la **URL**, que indica donde se encuentra el archivo y cómo conectarse con él (generalmente http://), y la **URN**, que es el nombre completo del archivo.
+HTTP es el protocolo que regula las conexiones entre Cliente y Servidor. Esto lo hace a través de la **URI**, que es la suma de la **URL**, que indica donde se encuentra el archivo y cómo conectarse con él (generalmente http://), y la **URN**, que es el nombre completo del archivo.
 
 HTTP tiene métodos que definen qué acciones se pueden hacer. Los más comunmente utilizados son:
 

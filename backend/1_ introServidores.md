@@ -54,7 +54,9 @@ app.listen(3000, () => {
 });
 ```
 
-Aún falta cargar todo el sistema de ruteo, esta es solo la base para levantar el servidor. El servidor quedará siempre levantado mientras no cerremos la consola donde corrimos el entry point. Para cerrar el servidor, debemos hacer _Ctrl+C_. Cuando hagamos cambios en el servidor, debemos volver a correr el servidor, cerrandolo y volviéndolo a abrir.
+Aún falta cargar todo el sistema de ruteo, esta es solo la base para levantar el servidor. El servidor quedará siempre levantado luego de que corramos en la consola `noda app.js` mientras no cerremos la consola donde corrimos el entry point. Para cerrar el servidor, debemos hacer _Ctrl+C_. Cuando hagamos cambios en el servidor, debemos volver a correr el servidor, cerrandolo y volviéndolo a abrir.
+
+Podemos también correr el proyecto con **nodemon**, instalandolo en el proyecto y luego corriendo en consola `nodemon app.js`
 
 ## Introducción a Routing y Response
 

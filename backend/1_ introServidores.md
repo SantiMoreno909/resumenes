@@ -40,7 +40,7 @@ Para instalarlo, debemos escribir `npm install express --save`. Luego, debemos r
 1. `const express = require('express');`
 2. `const app = express();`
 
-Así, tendremos disponibles todos los métodos del métodos disponibles en Express.
+Así, tendremos disponibles todos los métodos disponibles en Express.
 
 ## Levantar un servidor con Express
 

@@ -21,7 +21,7 @@ Del lado del cliente encontramos lenguajes como HTML, CSS y JavaScript, meintras
 
 ## Introducción a HTTP
 
-HTTP es el protocolo que regula las conecciones entre Cliente y Servidor. Esto lo hace a través de la **URI**, que es la suma de la **URL**, que indica donde se encuentra el archivo y cómo conectarse con él (generalmente http://), y la **URN**, que es el nombre completo del archivo.
+HTTP es el protocolo que regula las conexiones entre Cliente y Servidor. Esto lo hace a través de la **URI**, que es la suma de la **URL**, que indica donde se encuentra el archivo y cómo conectarse con él (generalmente http://), y la **URN**, que es el nombre completo del archivo.
 
 HTTP tiene métodos que definen qué acciones se pueden hacer. Los más comunmente utilizados son:
 
@@ -37,10 +37,12 @@ Express es un framework, una infraestructura pensada para aplicaciones web y mó
 
 Para instalarlo, debemos escribir `npm install express --save`. Luego, debemos requerir este módulo en el entry point, que generalmente es **app.js**. Esto se hace con las siguientes líneas:
 
-1. `const express = require('express');`
-2. `const app = express();`
+```javascript
+const express = require('express');
+const app = express();
+```
 
-Así, tendremos disponibles todos los métodos del métodos disponibles en Express.
+Así, tendremos disponibles todos los métodos disponibles en Express.
 
 ## Levantar un servidor con Express
 
@@ -52,7 +54,9 @@ app.listen(3000, () => {
 });
 ```
 
-Aún falta cargar todo el sistema de ruteo, esta es solo la base para levantar el servidor. El servidor quedará siempre levantado mientras no cerremos la consola donde corrimos el entry point. Para cerrar el servidor, debemos hacer _Ctrl+C_. Cuando hagamos cambios en el servidor, debemos volver a correr el servidor, cerrandolo y volviéndolo a abrir.
+Aún falta cargar todo el sistema de ruteo, esta es solo la base para levantar el servidor. El servidor quedará siempre levantado luego de que corramos en la consola `noda app.js` mientras no cerremos la consola donde corrimos el entry point. Para cerrar el servidor, debemos hacer _Ctrl+C_. Cuando hagamos cambios en el servidor, debemos volver a correr el servidor, cerrandolo y volviéndolo a abrir.
+
+Podemos también correr el proyecto con **nodemon**, instalandolo en el proyecto y luego corriendo en consola `nodemon app.js`
 
 ## Introducción a Routing y Response
 

@@ -1,4 +1,4 @@
-# Introducción a CRUD
+# CRUD: Primera parte
 
 CRUD hace referencia a las siglas de **Create, Read, Update y Delete**. Este proceso es sumamente natural para el trabajo de BackEnd.
 
@@ -111,4 +111,91 @@ En el caso de **DELETE**, se trabaja igual que con **PUT**, solo que cambiando e
 
 ## Error 404
 
-## path y FS
+Este error indica al sistema que el recurso que se está solicitando no existe. Para ayudarnos en estos casos, **Express** nos da una respuesta predefinida.
+
+Deberemos trabajar con el método **.use** dentro del entry point **app**, con las siguientes líneas de código:
+
+```javascript
+app.use((req, res, next) => {
+  res.status(404).render("not-found");
+});
+```
+
+Como vemos, trabajamos con los métodos **status** y **render**. En este caso, **'not-found'** sería el enlace a la página que muestra al usuario que sucedió un error.
+
+## path
+
+Este paquete, que está dentro de node, nos permite crear en una variable las rutas de acceso a
+
+```javascript
+let path = require("path");
+```
+
+## FS
+
+# CRUD: Segunda parte
+
+## Multer
+
+Esta librería nos permite cargar archivos al servidor. Este es un paquete de **npm** que nos permite recibir, procesar y guardar archivos subidos por los usuarios.
+
+### Instalación
+
+Lo primero que debemos hacer es instalar el paquete con **npm install multer**, Luego, deberemos requerirla en cada archivo donde la necesitemos.
+
+También deberemos preparar el formulario, agregándole el atributo **enctype='multipart/form-data'** a la etiqueta **form**.
+
+Cuando requiramos multer, deberemos hacerlo dentro del archivo de enrutado, para el grupo donde se encuentre el formulario con el cual trabajaremos.
+
+## Subiendo archivos con multer
+
+El primer archivo que deberemos trabajar será el html donde se encontrará el formulario, creando el mismo y agregando el atributo **enctype**, para que nos permita cargar archivos y guardarlos. También deberemos referenciar cada input con un **name** para identificarlo.
+
+Luego, trabajamos en el enrutador, requiriendo multer como vimos, dentro de la variable **multer**, y luego escribiendo las rutas para los métodos del controlador, haciendo:
+
+```javascript
+router.get("/registro", controlador.mostrarFormulario);
+router.post("/registro", controlador.procesarFormulario);
+```
+
+Luego, utilizando los métodos de la variable **multer**, utilizamos el método \*diskStorage\*\*, el cual se almacena dentro de una variable como un objeto de métodos, y que nos permitirá indicar dónde queremos guardar los archivos subidos, y con qué nombre. Se vería así:
+
+```javascript
+let multerDiskStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../public/profileImages"));
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+```
+
+En el ejemplo anterior, _folder_ será la carpeta donde deseamos guardar los archivos.
+
+El paso siguiente, será indicarle a multer dónde deseamos guardar los archivos. Para ello, haremos **let fileUpload = multer({storage: multerDiskStorage});**
+
+Ahora, le indicamos a multer qué archivo queremos procesar. Esto lo hacemos dentro de la ruta post que habíamos definido anteriormente, escribiendo: **router.post('/registro', fileUpload.single('imagenUsuario') controlador.procesarFormulario);**
+
+## Validación
+
+Ahora, deberemos trabajar en el controlador que tiene el procesamiento del formulario. Para el caso que veníamos trabajando, estaría dentro de **usuariosController.js**. El método que veníamos trabajando era **procesarFormulario**. En esta instancia, lo que haremos será validar la información cargada por el usuario, y darle un mensaje de error en caso de que algo esté mal. Esto, en código, se ve así:
+
+```javascript
+procesarFormulario: (req, res) => {
+  if ((req, file)) {
+    let group = req.body;
+    group.image = req.file.filename;
+    groupID = groupModel.create(group);
+    res.redirect("/groups" + groupId);
+  } else {
+    res.render("/groups/create");
+  }
+};
+```
+
+Gracias a **multer**, tenemos el objeto **file**, en el cual se guardará todo lo subido por el usuario.
+
+### Prueba ejercicio anterior
+
+router.post('/registro', fileUpload.single('imageUsuario'), controlador.procesarFormulario);

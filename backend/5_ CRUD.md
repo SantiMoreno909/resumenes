@@ -158,7 +158,7 @@ router.get("/registro", controlador.mostrarFormulario);
 router.post("/registro", controlador.procesarFormulario);
 ```
 
-Luego, utilizando los métodos de la variable **multer**, utilizamos el método \*diskStorage\*\*, el cual se almacena dentro de una variable como un objeto de métodos, y que nos permitirá indicar dónde queremos guardar los archivos subidos, y con qué nombre. Se vería así:
+Luego, utilizando los métodos de la variable **multer**, utilizamos el método **diskStorage**, el cual se almacena dentro de una variable como un objeto de métodos, y que nos permitirá indicar dónde queremos guardar los archivos subidos, y con qué nombre. Se vería así:
 
 ```javascript
 let multerDiskStorage = multer.diskStorage({
@@ -196,6 +196,18 @@ procesarFormulario: (req, res) => {
 
 Gracias a **multer**, tenemos el objeto **file**, en el cual se guardará todo lo subido por el usuario.
 
-### Prueba ejercicio anterior
+### Ejercicio de validación
 
-router.post('/registro', fileUpload.single('imageUsuario'), controlador.procesarFormulario);
+```javascript
+var upload = multer({ storage: storage });
+
+app.post("/register", upload.single("avatar"), (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error("Por favor seleccione un archivo");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  res.send(file);
+});
+```

@@ -91,4 +91,9 @@ CREATE TABLE ordenes (
 );
 ```
 
+- DROP TABLE eliminará la tabla especificada. Por ejemplo `DROP TABLE IF EXIST movies;`
+- ALTER TABLE permite modificar la tabla, pudiendo utilizar tres comandos: ADD para agregar una columna, MODIFY para modificarla, y DROP para eliminarla.
+
 ## Foreign Keys
+
+Una foreign key es una columna que referencia a otra tabla. Esto se utiliza para mantener la integridad de la bdd, funcionando como una restricción que se le puede asignar a una columan de una tabla, y que permite almacenar un valor único en cada fila, que hace referencia a una columna de otra tabla. Se indican con el agregado **(FK)**.

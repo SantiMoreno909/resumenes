@@ -29,3 +29,29 @@ Otra forma es enviarlos en formato **text**, y también en **URL-encoded**. Esto
 Existe también un método de petición llamado **HEAD**, cuya función es conocer la última fecha de modificación del recurso. Si el cliente lo solicita, y ve que la fecha de modificación del recurso le es útil, puede entonces hacer una petición por GET para obtener los recursos.
 
 ## Creación de API propia
+
+El **primer paso** es diseñar la API, pensando en qué elementos queremos compartir con los usuarios que accedan a ella. Generalmente, esto se hace representando a los mismos como sustantivos comunes. El **segundo paso** es crear los **identificadores** de estos recursos, que serán los URLs o Endpoint de acceso a los mismos. Esta URL suele ser representativa del nombre del elemento que se compartirá en ella.
+
+Los elementos que se compartiran se llaman **Recursos**, y los paquetes que los engloban se llaman **Colecciones**. Un buen diseño de API Rest debería permitir a los usuarios acceder a un recurso particular, sin necesidad de acceder a toda la colección. Esto se hace mediante **id** específicas del recurso, que se utilizan en la URL, de modo similar a `/albumes/{id}`.
+
+Otra forma de acceder a un recurso, es a través de otros recursos, de otras colecciones, que se relacionen con los recursos a los cuales queremos acceder. Por ejemplo, `/artistas/{id}/albumes`.
+
+Lo más importante es que el diseño haga lo más cómodo posible el acceso a los recursos disponibles en la API.
+
+El **tercer paso** es definir qué deberá devolver el Endpoint. La mayoría de las API Rest utilizan formato JSON, contienen el mismo link que usamos para acceder a ellas, información genérica (como la cantidad de elementos contenida), y otros datos dentro del array **data**. Esto se ve en el siguiente ejemplo:
+
+```JSON
+{
+    "link": "http://domain.com/api/genres",
+    "total_items": 5,
+    "data": [
+        {"id": 1, "name": "Rock", "link": "http://domain.com/api/genres/1"},
+        {"id": 2, "name": "Pop", "link": "http://domain.com/api/genres/2"},
+        {"id": 3, "name": "Blues", "link": "http://domain.com/api/genres/3"},
+        {"id": 4, "name": "Jazz", "link": "http://domain.com/api/genres/4"},
+        {"id": 5, "name": "Techno", "link": "http://domain.com/api/genres/5"},
+    ]
+}
+```
+
+El **cuarto y último paso** es asociar a los Endpoint con métodos HTTP para realizar operaciones. Así podrémos aplicar CRUD a los datos de la API Rest. Los métodos disponibles son GET, POST, PUT, PATCH y DELETE.

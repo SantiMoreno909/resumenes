@@ -6,7 +6,7 @@ Las **sessions** permiten, básicamente, establecer información específica de 
 
 ### Express Session
 
-Como no, vamos a usar partes de express para esta parte. Para ello, instalamos la librería con `npm install express-session --save`. Luego, lo incluimos en el proyecto dentro del **entry point** con `const session = require('express-session');`, y lo declaramos como middleware en el proyecto, utilizando `app.use(session({secret: 'Esto es un secreto pa'}))`. El texto que guardamos dentro de la propiedad del objeto que pasamos como parámetro a **session** funcionará como un identificador de ello, haciendo que la identificación de la sesión en el navegador sea mucho más segura.
+Como no, vamos a usar partes de express para esto. Para ello, instalamos la librería con `npm install express-session --save`. Luego, lo incluimos en el proyecto dentro del **entry point** con `const session = require('express-session');`, y lo declaramos como middleware en el proyecto, utilizando `app.use(session({secret: 'Esto es un secreto pa'}))`. El texto que guardamos dentro de la propiedad del objeto que pasamos como parámetro a **session** funcionará como un identificador de ello, haciendo que la identificación de la sesión en el navegador sea mucho más segura.
 
 Así, por ejemplo, podríamos declarar `req.session.idioma = 'Español'` dentro de un controler, y quedaría siempre con esa información declarada cuando naveguemos entre páginas del mismo sitio.
 
@@ -18,7 +18,7 @@ Para guardar una cookie, lo hacemos con `res.cookie('recordame', usuarioALoguers
 
 ## Hashing (Encriptado de datos)
 
-Cuando tenemos información sensible, es fundamental guardarla encriptada, y no tal cual es escrita por el usuario. Esto es lo que se conoce como **hasheo**, y lo que se guarda es el **hash**, y no la contraseña escrita tal cual lo hizo el usuario. Para poder hacer esto, debemos instalar el paquete **bcryptjs**, ingresando en consola `npm install --save bcryptjs`, y luego lo requerimos donde vayamos a utilizarlo, con `let bcrypt = require('bcryptjs)`.
+Cuando tenemos información sensible, es fundamental guardarla encriptada, y no tal cual es escrita por el usuario. Esto es lo que se conoce como **hasheo**, y lo que se guarda es el **hash**, y no la contraseña escrita tal cual lo hizo el usuario. Para poder hacer esto, debemos instalar el paquete **bcryptjs**, ingresando en consola `npm install bcryptjs --save`, y luego lo requerimos donde vayamos a utilizarlo, con `let bcrypt = require('bcryptjs)`.
 
 Para usarlo, debemos escribir `bcrypt.hashSync(password, 10);`. Esta función lleva dos parámetros: El texto a encriptar, y la cantidad de _sal_ que queremos darle al encriptado. La _sal_ es un número, que básicamente varía el hash. Lo normal es darle como valores 10 o 12.
 

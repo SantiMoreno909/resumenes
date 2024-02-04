@@ -4,7 +4,7 @@
 
 **INSERT** permite agregar datos en una tabla. Existen dos formas de hacerlo: Insertando datos en **todas las columnas**, o haciéndolo solo en las **columnas que especifiquemos**.
 
-Si estamos incertando datos en todas las columnas, no hace falta declarar el nombre de cada columna. Sin embargo, el orden en que insertemos los valores deberá ser el orden de asignación de las columnas en la tabla:
+Si estamos insertando datos en todas las columnas, no hace falta declarar el nombre de cada columna. Sin embargo, el orden en que insertemos los valores deberá ser el orden de asignación de las columnas en la tabla:
 
 ```sql
 INSERT INTO usuarios (id, nombre, apellido)
@@ -25,7 +25,7 @@ INSERT INTO usuarios (nombre, apellido)
 VALUES ('Max', 'Verstappen');
 ```
 
-**UPDATE** modificará los registros existentes en una tabla. Es importante utilizar siempre WHERE en la sentencia paara agregar la condición de cuáles son las filas que queremos actualizar. Por ejemplo:
+**UPDATE** modificará los registros existentes en una tabla. Es importante utilizar siempre WHERE en la sentencia para agregar la condición de cuáles son las filas que queremos actualizar. Por ejemplo:
 
 ```sql
 UPDATE usuarios
@@ -54,7 +54,7 @@ La función del WHERE es la de condicionar y filtrar las consultas SELECT que se
 
 - **=**: Igual a;
 - **>**: Mayor que;
-- **>=**: Mayor o igual que que;
+- **>=**: Mayor o igual que;
 - **<**: Menor que;
 - **<=**: Menor o igual que;
 - **<>**: Diferente a;
@@ -70,7 +70,7 @@ La función del WHERE es la de condicionar y filtrar las consultas SELECT que se
 
 Cuando necesitamos obtener valores dentro de un rango, usamos el operador **BETWEEN**. Este incluye los extremos, funciona con números, textos y fechas, y se usa como filtro de un WHERE.
 
-Cuando hacemos un filtro con un **WHERE**, podemos especificar un patrón de búsqueda que nos permita especificar algo concreto que queremos encontrar en los registros. Eso lo logramos usando **comodines**, por ejemplo, buscando la letra "a" como segundo caracter, o una direccióon postal específica. Las opciones de comodines son:
+Cuando hacemos un filtro con un **WHERE**, podemos especificar un patrón de búsqueda que nos permita especificar algo concreto que queremos encontrar en los registros. Eso lo logramos usando **comodines**, por ejemplo, buscando la letra "a" como segundo caracter, o una dirección postal específica. Las opciones de comodines son:
 
 - **%**: Es un sustituto que representa cero, uno o varios caracteres.
 - **\_**: Es un sustituto para un solo caracter.

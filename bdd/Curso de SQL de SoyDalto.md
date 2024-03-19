@@ -54,7 +54,7 @@ Las **claves primarias** son el identificador que hace único a cada registro de
 
 ## Diagrama para relacionar tablas
 
-Las relaciones que se dan entre las tablas, dependen de las relaciones que e dan entre las entidades en la realidad. Los tipos de relaciones son:
+Las relaciones que se dan entre las tablas, dependen de las relaciones que se dan entre las entidades en la realidad. Los tipos de relaciones son:
 
 - **Uno a Uno**: Un elemento de la tabla A, puede relacionarse solo con un elemento de la tabla B. Por ejemplo, una sola persona puede tener un solo padre.
 - **Uno a Muchos**: Un elemento de la tabla A, puede relacionarse solo con muchos elementos de la tabla B. Por ejemplo, una sola persona puede tener muchos amigos.
@@ -188,13 +188,43 @@ Las consultas que se unan con UNION o UNION ALL deben tener la misma cantidad de
 
 ## Cardinalidad
 
+En el contexto de las BDD, la **cardinalidad** hace referencia a la forma de relación que existe entre tablas. Los tipos de relaciones son:
+
+- **Uno a Uno**: Un elemento de la tabla A, puede relacionarse solo con un elemento de la tabla B. Por ejemplo, una sola persona puede tener un solo padre.
+- **Uno a Muchos**: Un elemento de la tabla A, puede relacionarse solo con muchos elementos de la tabla B. Por ejemplo, una sola persona puede tener muchos amigos.
+- **Muchos a Muchos**: Muchos elementos de la tabla A pueden relacionarse con muchos elementos de la tabla B. Por ejemplo, muchos alumnos pueden tener muchos profesores.
+
 ## Normalización
+
+La normalización es un proceso de diseño que nos permite aumentar la eficiencia de consultas en las BDD. Existen 5 niveles o formas normales de hacerlo:
+
+1. Primera forma normal (FN1): En 1FN, cada tabla de la base de datos debe tener una clave primaria y todas las columnas deben contener valores atómicos, es decir, valores simples que no puedan descomponerse en partes más pequeñas. Además, no puede haber repeticiones de grupos de columnas.
+2. Segunda forma normal (FN2): Para cumplir con la 2FN, la base de datos debe estar en 1FN y además, todas las columnas que no formen parte de la clave primaria deben depender completamente de la clave primaria. Así, por ejemplo, podemos separar Pedidos y Productos en dos tablas distintas, y relacionarlos mediante PK y FK.
+3. Tercera forma normal (FN3): La 3FN requiere que la base de datos esté en 2FN y que no existan dependencias transitivas entre las columnas no clave. Esto significa que no debe haber ninguna columna que dependa de otra columna que no sea la clave primaria. Por ejemplo, Barrio y Ciudad son interdependientes y, para evitar la repetición de datos, se puede crear una tabla que los nuclee, relacionandolos mediante PK y FK.
+4. Cuarta forma normal (FN4): La 4FN se refiere a la eliminación de dependencias multivaluadas. Esto significa que una tabla no debería contener conjuntos de datos que no están relacionados directamente con la clave primaria. Esto se puede ver en la creación de una tabla que relacione, con un PK, cada categoría con sus subcategorías, para poder luego indicar ese PK como FK dentro de la tabla de productos.
+5. Quinta forma normal (FN5): La 5FN busca minimizar la redundancia de datos aún más, a través de la descomposición de relaciones en esquemas más pequeños y más especializados.
 
 ## Índices
 
+Un **índice** de BDD tiene el objetivo de hacer más óptimas las consultas que se realizan. Esto funciona como el índice de un libro, indexando columnas que nos permiten realizar búsquedas más óptimas. Los índices pueden ser **únicos** y **no únicos**. Los _únicos_ son los PK, que no pueden tener valores únicos.
+
+Para crear un índice en una tabla, debemos ejecutar `CREATE INDEX nombre ON TablaProductos (ProductName)`. Este tipo de índice permite campos nulos y duplicados, por lo cual son los _no únicos_.
+
+Para los índices _únicos_ debemos escribir `CREATE UNIQUE INDEX nombre ON TablaProductos (ProductName)`. Esto hará que no se repitan los campos ni existan campos nulos.
+
+En síntesis, la funcionalidad de los índices es hacer que las consultas requieran menos recursos y tiempo para ejecutarse, pudiendo afectarlas en una reducción temporal cercana al 30%, lo que, para grandes consultas, es UNA BARBARIDAD de tiempo. Por tanto, son sumamente útiles de crear, siempre que la consulta sea grande y valga la pena. Para consultas pequeñas y sencillas, no vale la pena el trabajo.
+
 ## Vistas
 
-6:15
+La **vista** es la forma en que se ve el resultado de la consulta. Para crear una vista, hacemos algo así:
+
+```sql
+CREATE VIEW Productos_simplificados AS
+SELECT ProductID, ProductName, Price FROM Products
+WHERE ProductID > 20 ORDER BY ProductID DESC
+```
+
+Así, puedo ejecutar luego `SELECT * FROM Productos_simplificados`, y tendremos todo el código anterior ya creado para obtener las vistas de forma super rápida. No se debe abusar de sus creaciones, pero pueden ser sumamente útiles. No debemos darle el mismo nombre a una vista que a una tabla, porque le dará prioridad a la vista y ello podría darnos problemas en consultas futuras.
 
 # Sección Avanzada
 

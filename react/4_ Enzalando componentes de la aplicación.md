@@ -62,7 +62,7 @@ import { Link } from "react-router-dom";
 
 ## Como hacer Switch de rutas y componentes
 
-Una ruta muy importante es la del **error 404 Not Found**. Habiendo renderizado el mismo con `<Route component={Error404} />`, para indicar que el mismo se renderice cuando la ruta ingresada por el visitante no exista en la aplicación, deberemos usar el componente **Switch**. A este también debemos importarlo, y su tag deberá anidar todas las rutas antes ingresadas, yendo el del error siempre al ginal, del siguiente modo:
+Una ruta muy importante es la del **error 404 Not Found**. Habiendo renderizado el mismo con `<Route component={Error404} />`, para indicar que el mismo se renderice cuando la ruta ingresada por el visitante no exista en la aplicación, deberemos usar el componente **Switch**. A este también debemos importarlo, y su tag deberá anidar todas las rutas antes ingresadas, yendo el del error siempre al final, del siguiente modo:
 
 ```javascript
 import { Route, Switch } from "react-router-dom";

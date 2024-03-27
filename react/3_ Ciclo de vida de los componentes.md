@@ -2,7 +2,7 @@
 
 ## Componentes statefull
 
-Los componentes stateful, o con estado, son aquellos que poseen información interna que a su vez puede ser modificada propiamente por estos componentes. Este tipo de componente es sumamente funcional dado que nos permite dejar de depender de las props para trabajar con información dinámica. Sin embargo, bajo esta consigna no debemos pensar que ahora todos nuestros componentes deberán ser "de estado", ya que dicha decisión dependerá del contexto dentro del que se utilice dicho componente. Un ejemplo útil para pensar en estados, es cuando una imagen reconoce un evento, como un click, y se le aplica un estilo onda "seleccionado".
+Los componentes statefull, o con estado, son aquellos que poseen información interna que a su vez puede ser modificada propiamente por estos componentes. Este tipo de componente es sumamente funcional dado que nos permite dejar de depender de las props para trabajar con información dinámica. Sin embargo, bajo esta consigna no debemos pensar que ahora todos nuestros componentes deberán ser "de estado", ya que dicha decisión dependerá del contexto dentro del que se utilice dicho componente. Un ejemplo útil para pensar en estados, es cuando una imagen reconoce un evento, como un click, y se le aplica un estilo onda "seleccionado".
 
 Para poder generar estados en los componentes, deberemos importar React con la siguiente modificación: `import React, { Component } from 'react';`. Los componentes con estado dejan de ser componentes nativos de JS, y pasan a ser clases, un tipo de datos especial, sobre todo pensando en el paradigma POO. Para trabajarlos, debemos hacer:
 

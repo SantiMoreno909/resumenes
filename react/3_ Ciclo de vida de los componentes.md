@@ -145,7 +145,7 @@ React se encarga de hacer pasar los componentes por tres claras etapas, que se e
 
 1. Se muestra en pantalla (**montaje**).
 2. Sufre cambios (**actualización**).
-3. Deja mostrarse en pantalla (**desmontaje**).
+3. Deja de mostrarse en pantalla (**desmontaje**).
 
 A todo este proceso React lo llama el "ciclo de vida" y es algo muy importante de entender, ya que a lo largo de estas tres etapas vamos a poder generar distintas funcionalidades si así lo quisiéramos.
 

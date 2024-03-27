@@ -2,7 +2,7 @@
 
 ## ¿Qué es React?
 
-React es una **biblioteca de componentes** desarrollada por Facebook, con el objetivo de optimizar al máximo los aplicaciones single page. Lo que hace es trabajar con funciones que actualizan los cambios de estado de la aplicación, actualizando así rápidamente lo mostrado en el DOM. Para ello, utiliza un concepto llamado **Virtual DOM**, que compara el virtual con el real, para así saber qué debe actualizar en el DOM Real.
+React es una **biblioteca de componentes** desarrollada por Facebook, con el objetivo de optimizar al máximo las aplicaciones _single page_. Lo que hace es trabajar con funciones que actualizan los cambios de estado de la aplicación, actualizando así rápidamente lo mostrado en el DOM. Para ello, utiliza un concepto llamado **Virtual DOM**, que compara el virtual con el real, para así saber qué debe actualizar en el DOM Real.
 
 ## Instalación y puesta en marcha
 

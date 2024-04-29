@@ -278,37 +278,78 @@ Un detalle interesante es que podemos, en vez de hacer el **console.log(err)**, 
 
 [Volver al Índice](#índice)
 
-Escribir
+**npm** es el compendio de archivos más grande del mundo, el cual contiene paquetes que pueden descargarse y utilizarse con Node.js. También contiene una herramienta para la línea de comandos.
 
 ## 3.1 Introducción a npm
 
 [Volver al Índice](#índice)
 
-Escribir
+Un **paquete** es un archivo, o bien un conjunto de ellos, descrito por un archivo **package.json**. Dentro de npm, un **módulo** es cualquier archivo o directorio en el direcorio **node_modules** que puede ser importado con require. **node_modules** es una carpeta que se crea automáticamente cuando comenzamos a trabajar con npm. Solo los módulos que tienen un archivo **package.json** son paquetes.
+
+Una **dependencia** es un paquete que otro paquete necesita para funcionar correctamente. Por tanto, tanto la dependencia como el paquete que la necesita deberán ser creados.
 
 ## 3.2 Crear paquetes con npm
 
 [Volver al Índice](#índice)
 
-Escribir
+Para crear un paquete, lo primero que debemos hacer es crear la carpeta donde se creará el mismo. Para crear su archivo package.json, debemos ejecutar en consola, parados dentro de la carpeta del paquete, el siguiente comando: `npm init`. Este comando nos llevará a un proceso en el cual configuraremos los aspectos más básicos del paquete que estamos creado, pidiendonos que confirmemos, o bien cambiemos, los diferentes datos que nos solicita, tales como nombre, versión, descripción, el entry point, etc. Luego, nos dará toda la información y nos pedirá que la confirmemos. Al darle 'y', se confirmará y se creará el archivo package.json con todos los datos cargados, datos que podrán ser modificados a futuro.
+
+Si escribimos `npm init --yes`, todos los datos antes mencionados se cargarán como están por defecto, y no tendremos que realizar todo el proceso descripto.
 
 ## 3.3 Introducción al formato JSON
 
 [Volver al Índice](#índice)
 
-Escribir
+JSON es un formato muy utilizado en desarrollo web para almacenar y transmitir información y configuraciones. Sus siglas significan **JavaScript Object Notation** o **Notación de Objetos de JavaScript**, y es un formato de texto utilizado para almacenar y transportar información, formateado basado en la sintaxis de objetos de JavaScript. Nos permite transformar objetos de JavaScript a texto para almacenarlo. Este formato es independiente del lenguaje de programación con el cual estemos trabajando.
+
+Entre sus **características** más importantes, encontramos que:
+
+- Los datos se representan como pares clave-valor, lo que llamamos propiedades.
+- Las claves siempre deben ser cadenas de caracteres.
+- Los pares deben estar separados entre sí por comas.
+- Puede contener cadenas de caracteres, números, arreglos, booleanos y objetos.
+- El conjunto de pares clave-valor que compone la información se rodea por dos llaves principales. También puede estar rodeado por corchetes.
+
+Un ejemplo es:
+
+```JSON
+{
+  "titulo": "Aprendiendo Node.js",
+  "numVistas": 45642,
+  "numLikes": 21123,
+  "temas": [
+    "JavaScript",
+    "Node.js"
+  ],
+  "esPublico": true
+}
+```
+
+Para **trabajar con un archivo JSON dentro de Node.js**, simplemente debemos requerirlo. Para **convertir JavaScript a JSON**, podemos usar los siguientes métodos:
+
+- JSON.stringify(): Convierte el objeto JavaScript a una cadena de caracteres en formato JSON. Recibe como parámetro el nombre del objeto que se desee convertir.
+- JSON.parse(): Convierte una cadena de caracteres en formato JSON a un objeto de JavaScript. Recibe como parámetro el nombre del objeto que se desee convertir.
 
 ## 3.4 Instalar y desinstalar paquetes con npm
 
 [Volver al Índice](#índice)
 
-Escribir
+Para **instalar** un paquete, como por ejemplo Express, debemos ejecutar el comando `npm install express`. Esto abrirá una barra de progreso mientras se descarga e instala todo el contenido del paquete, incluidas sus dependencias. Podemos ver los paquetes que instalemos dentro del apartado **dependencies** dentro de nuestro archivo **package.json**. Para **desinstalar** un paquete, simplemente ejecutamos en consola `npm uninstall express`.
+
+Podemos indicar también la versión que deseemos instalar, indicando luego del nombre del paquete el número de la versión, indicada con un @, del siguiente modo: `npm install express@4.15.1`.
+
+También podemos incluir las **devDependencies**, dependencias que se necesitaran solamente durante el desarrollo, pero no durante la producción. Esto se hace con el siguiente comando: `npm install express --save-dev`.
 
 ## 3.5 package-lock.json
 
 [Volver al Índice](#índice)
 
-Escribir
+Este archivo se genera automáticamente cuando npm modifica el _árbol_ de la carpeta **node_modules** o package.json. Esto nos permite mantener un registro de las dependencias necesarias para generar nuestro paquete. Este archivo, por tanto, describe el árbol generado para que futuras instalaciones puedan generar exactamente el mismo árbol. Dentro de él, encontramos los siguientes datos:
+
+- name: Describe el nombre del paquete, igual que el que incluimos en package.json.
+- version;
+- lockfileVersion: Describe la versión del archivo package-lock.json.
+- packages: Es un objeto que asocia la ubicación de cada paquete con un objeto que contiene información sobre ese paquete.
 
 # Capítulo 4: Eventos y JavaScript asíncrono
 

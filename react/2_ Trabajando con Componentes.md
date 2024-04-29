@@ -2,7 +2,7 @@
 
 ## Props
 
-Un componente es una pieza de código reutilizable. El tema es que, para hacerlo reutilizable, necesitaremos que su estructura se mantenga constante, pero no así su contenido, para poder adaptarlo a diferentes usos. Para eso sirven las **props**, parámetros de los componentes que son pasadas al mismo al momento de su utilización, en forma de objeto literal. Lo que deberemos hacer es pasar el parámetro _props_ a la función, y luego indicar en qué parte del código deseamos que se muestre el contenido:
+Un componente es una pieza de código reutilizable. El tema es que, para hacerlo reutilizable, necesitaremos que su estructura se mantenga constante, pero no así su contenido, para poder adaptarlo a diferentes usos. Para eso sirven las **props**, parámetros de los componentes que son pasadas al mismo momento de su utilización, en forma de objeto literal. Lo que deberemos hacer es pasar el parámetro _props_ a la función, y luego indicar en qué parte del código deseamos que se muestre el contenido:
 
 ```javascript
 function Saludo(props) {

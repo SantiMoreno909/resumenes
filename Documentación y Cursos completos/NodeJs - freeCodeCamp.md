@@ -355,178 +355,1008 @@ Este archivo se genera automáticamente cuando npm modifica el _árbol_ de la ca
 
 [Volver al Índice](#índice)
 
-Escribir
-
 ## 4.1 Eventos de Node.js
 
 [Volver al Índice](#índice)
 
-Escribir
+Un **evento** es una acción que se realiza en la aplicación, que puede ser producido por una interacción con el usuario, con bases de datos, etc. Node.js está basado en eventos asíncronos.
+
+Los **emitters** o emisores son objetos que emiten eventos nombrados y llaman a funciones específicas cuando ocurren. Estos son instancias de la clase **EventEmitter**, un concepto relacionado con POO, y tienen un método **.on()**, que permite asociar una función al evento. La función que se ejecuta puede ser un **Event Handler**, cuando la función emite o maneja el evento; o un **Event Listener**.
 
 ## 4.2 Módulo events
 
 [Volver al Índice](#índice)
 
-Escribir
+Este módulo nos permite definir, emitir y escuchar eventos para saber cuando ocurren. Para utilizarlo, debemos requerirlo con `const EventEmitter = require('events');`. Se le llama así porque así se llama la función que retorna el módulo.
+
+Para emitir eventos, debemos asignarle el nuevo EventEmitter a una constante cuyo nombre sea representativo del evento. Por ejemplo:
+
+```javascript
+const EventEmitter = require("events");
+
+const emisorProductos = new EventEmitter();
+
+// asociamos el evento 'compra' al emisor
+emisorProductos.on("compra", () => {
+  console.log("Se realizó una compra.");
+});
+
+emisorProductos.emite("compra"); // Se ejecutará el callback anteriormente definido para el evento "compra"
+```
 
 ## 4.3 Promesas con JavaScript
 
 [Volver al Índice](#índice)
 
-Escribir
+Una **promesa** es un objeto que representa el eventual resultado o error de una operación asíncrona. Una promesa es un objeto de JavaScript, que se denomina normalmente **Función callback**, haciendo alusión a que se espera la respuesta de un evento anterior. Estas callback pueden definirse formalmente como una función que se pasa a otra función como argumento, y que luego se ejecuta dentro de la función externa.
+
+Las promesas tienen un método **.then()**, con el cual podemos decidir qué ocurre cuando se completa la promesa, ya sea con éxito o con un error.
 
 ### 4.3.1 Prácticas de promesas
 
 [Volver al Índice](#índice)
 
-Escribir
+Para crear una promesa, debemos hacer el siguiente proceso:
+
+```javascript
+const promesaCumplida  true;
+
+const miPromesa = new Promise((resolve, reject) => {
+  setTimepout(() => {
+    //Creamos esto para simular la demora en el cumplimiento
+    if (promesaCumplida) {
+      resolve("¡Promesa cumplida!");
+    } else {
+      reject("Promesa rechazada...");
+    }
+  }, 3000);
+});
+
+// // Ahora hacemos que la promesa se ejecute
+// miPromesa.then((valor) => {
+//   console.log(valor);
+//   // valor toma el valor que retorne la promesa
+//   //Acá no se manejan los errores
+// });
+
+const manejarPromesaCumplida = (valor) => {
+  console.log(valor);
+};
+
+const manejarPromesaRechazada = (razonRechazo) => {
+  console.log(razonRechazo)
+};
+
+// Ahora si tenemos manejo de errores
+miPromesa.then(manejarPromesaCumplida, manejarPromesaRechazada);
+```
+
+También podemos hacer el manejo de errores encadenando **.then()** del siguiente modo:
+
+```javascript
+miPromesa
+  .then((mensajeExito) => {
+    console.log(mensajeExito);
+  })
+  .then(null, (mensajeError) => {
+    console.log(mensajeError);
+  });
+```
 
 ## 4.4 .catch()
 
 [Volver al Índice](#índice)
 
-Escribir
+**.catch()** es un método de promesa que solo se ejecuta si la promesa es rechazada. Lo que hacemos es trabajar como cuando encadenamos los **.then()**, del siguiente modo:
+
+```javascript
+miPromesa
+  .then((mensajeExito) => {
+    console.log(mensajeExito);
+  })
+  .catch((mensajeError) => {
+    // Notese que se eliminó el null
+    console.log(mensajeError);
+  });
+```
+
+Otra forma de hacerlo, es definiendo las funciones de manejo de éxito y error, y haciendo: `miPromesa.then(manejarPromesaCumplida).catch(manejarPromesaRechazada);`. Esta alternativa suele ser usada cuando la lógica de las funciones de manejo de error y éxito es más extensa.
 
 ## 4.5 Encadenar promesas y async await
 
 [Volver al Índice](#índice)
 
-Escribir
+**async** y **await** son dos palabras claves que podemos utilizar para el trabajo con promesas. En cuanto al **encadenamiento de promesas**, lo que se hace básicamente es crear varias promesas, y colocarlas una a continuación de otra, en una cadena de **.then()**, de modo tal que, si la ejecución de la promesa es exitosa, se pasa al primer **.then()**, luego al segundo y así sucesivamente hasta terminar el proceso.
+
+La ventaja de usar async y await estás en que podemos escribir código asíncrono como si fuera código síncrono. Para hacer esto, comenzamos escribiendo la sintaxis propia de una función, con la diferencia de que se agrega **async** al principio. Luego escribimos el código de la función como si fuera síncrona, pero agregando la palabra **await** al principio, tal cual se ve en el ejemplo:
+
+```javascript
+function ordenarProducto(producto) {
+  return new Promise((resolve, reject) => {
+    console.log(`Ordenando: ${producto}`);
+    setTimeout(() => {
+      if (producto === "taza") {
+        resolve("Ordenando una taza");
+      } else {
+        reject("Este producto no está disponible");
+      }
+    });
+  });
+}
+
+function procesarPedido(respuesta) {
+  return new Promise((resolve) => {
+    console.log("Procesando respuesta...");
+    console.log(`La respuesta fue: ${respuesta}`);
+    setTimeout(() => {
+      resolve("Gracias por tu compra");
+    }, 4000);
+  });
+}
+
+async function realizarPedido(producto) {
+  try {
+    const respuesta = await ordenarProducto(producto);
+    console.log("Respuesta recibida");
+    console.log(respuesta);
+    const respuestaProcesada = await procesarPedido(respuesta);
+    console.log(respuestaProcesada);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+realizarPedido("taza");
+```
+
+**try** y **catch** se usan para manejar errores, colocando entre las llaves de **try** el código que pueda generar problemas, y en **catch** el manejo del error.
 
 # Capítulo 5: HTTP y rutas en Node.js
 
 [Volver al Índice](#índice)
 
-Escribir
-
 ## 5.1 Modelo cliente-servidor
 
 [Volver al Índice](#índice)
 
-Escribir
+Este modelo es el que usamos para acceder a internet y obtener recursos e información. Un **Cliente** se puede definir como el navegador desde el cual se realizar solicitudes a un servidor, mientras que el término **Servidor** hace referencia tanto al programa que se ejecuta, como al aparato físico que lo contiene, y que en conjunto ofrecen ese servicio al cliente, enviándole la información que este solicita.
+
+Si bien la información que estos se envían está codificada de distinta forma, entre ambos se entienden, debido a que el servidor conoce el formato esperado por el cliente, y el cliente conoce el formato en que recibirá la información. Ambos saben qué esperar el uno del otro.
+
+En cuanto al formato de los mensajes, es el **protocolo HTTP** quien define su formato, y cuyo significado es **HiperText Transfer Protocol**. Un **protocolo** es, básicamente, un conjunto de reglas que permiten transmitir información entre dispositivos de una red.
 
 ## 5.2 Solicitudes HTTP
 
 [Volver al Índice](#índice)
 
-Escribir
+Para realizar la comunicación entre servidor y cliente, deben darse las **solicitudes** y **respuestas**. El pedido o solicitud del cliente, denominado **request**, le envía al servidor los métodos HTTP, el camino (path), la versió de HTTP, las cabeceras o headers, y el cuerpo o body, con toda la información al respecto de la solicitud que está realizando.
+
+El **body** contiene la información que debe ser enviada al servidor para procesar la solicitud. Normalment esa información se transmite en formato JSON. No se incluye el body en todas las solicitudes, sino solo en aquellas que requieran enviar información. Por ejemplo, en los métodos POST y PUT.
+
+HTTPS es lo mismo, pero con una capa extra de seguridad.
 
 ## 5.3 Métodos HTTP
 
 [Volver al Índice](#índice)
 
-Escribir
+Es un vero o sustantivo, que indica qué quiere el cliente. Los más utilizados son
+
+- GET: Significa obtener, y nos permite justamente solicitar un recurso específico, como un archivo HTML, CSS o una imagen.
+- POST: Sirve para crear un recurso específico, como al crear un nuevo usuario en una BDD.
+- PUT: Se usa para modificar un recurso específico, por ejemplo, modificando los datos del usuario anterior.
+- DELETE: Sirve para eliminar un recurso específico. Por ejemplo, eliminar al usuario de la base de datos.
 
 ## 5.4 Respuestas HTTP
 
 [Volver al Índice](#índice)
 
-Escribir
+Una vez que el cliente realiza su pedido y el servidor la procesa, envía el **response**, el cual tiene, dentro de sus elementos específicos, un código de estado, un texto de estado, la versión de HTTP, headers y el body. En este caso, los **headers** son opcionales, y proveen información adicional sobre la respuesta, mientras que el **body** contiene la información que se debe enviar desde el servidor hacia el cliente.
 
 ## 5.5 Códigos de estado HTTP
 
 [Volver al Índice](#índice)
 
-Escribir
+Estos códigos son muy importantes para saber qué sucedió con la solicitud dentro de el servidor. Estos **códigos de estado** son números que indican, o bien si se completo exitosamente la solicitud HTTP, o bien qué fue lo que salió mal. Básicamente, los códigos se dividen en:
+
+- 100-199: Respuestas informativas.
+- 200-299: Respuestas satisfactorias.
+- 300-399: Redirecciones.
+- 400-499: Errores de los clientes.
+- 500-599: Errores de los servidores.
+
+Podemos econtrar el significado del código en la web de MDN. Con Node.js y Express podemos especificar el código de estado de la respuesta HTTP en nuestro servidor. Los más comunes son:
+
+- 200 OK - La respuesta fue exitosa;
+- 400 Bad Request - El servidor no pudo interpretar la solicitud;
+- 404 Not Found - El servidor no pudo encontrar el recurso solicitado;
+- 500 Internal Server Error - El servidor encontró una situación que no sabe cómo manejar.
 
 ## 5.6 Tu primer servidor con Node.js
 
 [Volver al Índice](#índice)
 
-Escribir
+Para esto, usaremos el **módulo http**, que le permite a Node.js transmitir información con el protocolo HTTP. Debemos incluirlo con `const http = require('http')`.
+
+Para cargar el servidor, necesitaremos un **puerto**, una ubicación virtual del sistema operativo en la cual se puede acceder a una aplicación o a un proceso específico que se esté ejecutando en ese puerto. Se representa con un número entero positivo
+
+Un modelo básico de servidor, muy básico aunque funcional, sería:
+
+```javascript
+const htt = require("http");
+const PORT = 3000;
+
+const servidor = http.reateServer((req, res) => {
+  // req contiene la solicitud HTTP
+  // res representa la respuesta HTTP
+  // Acá va todo el código para procesar la solicitud
+  res.end("Servidor funcionando");
+});
+
+servidor.listen(PORT, () => {
+  console.log("Servidor escuchando...");
+});
+```
 
 ## 5.7 req y res
 
 [Volver al Índice](#índice)
 
-Escribir
+Tanto **req** como **res** tienen montón de atributos , pero nosotros vamos a ver algunos de los más importantes:
+
+Para **req** tenemos:
+
+- req.url: La URL solicitada (sin el dominio ni el protocolo).
+- req.method: El método utilizado en la petición (GET, POST, etc.). Para otros métodos, nos recomiendan del curso utilizar la extensión REST Client, que nos permitirá simular envío de solicitudes para ver qué obtendremos de la solicitud enviada.
+- req.headers: Los headers enviados por el cliente.
+
+Para **res** tenemos:
+
+- res.setHeader(): Establecer un header a enviar, información adicional que queremos enviar al cliente.
+- res.getHeaders(): Nos permite obtener los headers que se hayan enviado.
+- res.writeHead(): Establece los headers y el status code a enviar.
+- res.write(): Agrega datos a la respuesta. Se pueden llamar varias veces.
+- res.end(): Termina la respuesta y envía los datos agregados con write().
+- res.send(): Se envía un respuesta estandarizada.
+- res.statusCode: Nos dá el código de estado de la respuesta que nos llega
 
 ## 5.8 Estructura de una URL
 
 [Volver al Índice](#índice)
 
-Escribir
+Una URL es la dirección de un recurso en la web. En español, significa _Localizador Uniforme de Recursos_. Básicamente, nos permite indicar cual es la página con la cual queremos interactuar. Sus partes son:
+
+- **https://**: Indica el protocolo de conexión que se usará.
+- **www**: Es un subdominio, información adicional que permite a los sitos web organizar y separar la información para distintos propósitos.
+- **Dominio**: Referencia única a un sitio web, que corresponde al nombre de la página.
+- **Dominio de nivel superior**: Va despues del dominio. Ejemplos son _.org_, _.com_, _.net_, _.edu_, _.gob_, y _.int_. Se suele hacer referencia a esta parte como TLD o Top-Level Domain.
+- **Camino (path)**: Indica a dónde se desea ir luego de estár en el archivo raíz de la web, archivo raíz indicado por todo el conjunto anterior. Cada parte del path se va indicando separado de la anterior por un slash (/).
+- **Parámetros de ruta**: Son parámetros fijos que nos permiten acceder a una parte específica del sitio, por ejemplo, el número de código de un producto para mostrar su correspondiente vista.
+- **Parámetros query**: Son parámetros que permiten realizar una búsqueda para obtener contenido dinámico. Se conocen tambien como _query string_. Su estructura es: `?q=cursos+de+node`. Estos son pares clave-valor que se utilizan para buscar los contenidos solicitados dentro del servidor. Podemos colocar varios de ellos, separándolos entre sí por un **&**. Normalmente se utilizan para filtrar solicitudes GET.
 
 ## 5.9 El módulo url
 
 [Volver al Índice](#índice)
 
-Escribir
+El módulo URL nos permite escribir URL mediante cadenas de caracteres, haciéndo `const miURL = new URL('https://www.ejemplo.org/cursos/programacion?ordenar=vistas&nivel=1')`. Esto nos permite acceder a las distintas propiedades del objeto, con propiedades como:
+
+- miURL.hostname: En este caso, sería _www.ejemplo.org_.
+- miURL.pathname: En este caso, sería _/cursos/programacion_.
+- miURL.searchParams: Este nos retorna un objeto que contiene los distintos parámetros. Para este caso, sería _{ 'ordenar' => 'vistas', 'nivel' => '1' }_. Podemos acceder a sus propiedades usando **miURL.searchParams.get('ordenar')**.
 
 ## 5.10 Routing en Node.js
 
 [Volver al Índice](#índice)
 
-Escribir
+**Routing** significa manejar las solicitudes del cliente hacia el navegador en base a ciertos criterios. Estos criterios son:
+
+- **El Método**: Es un verbo que describe el método de la solicitud HTTP. De esta forma, es servidor sabe qué tipo de operación se realizará.
+- **El Camino**: Indica al servidor el path o camino de la solicitud HTTP. Así, el servidor sabe el recurso específico que se usará.
+
+En general, esto se puede describir como una combinación de estas tres cosas: **Método + Path + Cómo manejarlo**. Ahora, veremos un ejemplo de cómo se haría con Node.js, pero veremos luego que, con Express, esto es mucho más sencillo de hacer.
+
+Lo primero que haremos, será establecer una pequeña base de datos con la cual trabajaremos:
+
+```javascript
+let infoCursos = {
+  programacion: [
+    {
+      id: 1,
+      titulo: "Aprende Python",
+      lenguaje: "python",
+      vistas: 15000,
+      nivel: "basico",
+    },
+    {
+      id: 2,
+      titulo: "Python intermedio",
+      lenguaje: "python",
+      vistas: 13000,
+      nivel: "intermedio",
+    },
+    {
+      id: 3,
+      titulo: "Aprende JavaScript",
+      lenguaje: "javascript",
+      vistas: 18000,
+      nivel: "basico",
+    },
+  ],
+  matematicas: [
+    {
+      id: 1,
+      titulo: "Aprende Calculo",
+      lenguaje: "calculo",
+      vistas: 9000,
+      nivel: "basico",
+    },
+    {
+      id: 2,
+      titulo: "Aprende Algebra",
+      lenguaje: "algebra",
+      vistas: 12000,
+      nivel: "intermedio",
+    },
+  ],
+};
+
+module.exports.infoCursos = infoCursos;
+```
+
+Ahora si, vemos el ejemplo de servidor con Node.js:
+
+```javascript
+const http = require("http");
+const cursos = require("./cursos");
+const PORT = 3000;
+
+const servidor = http.createServer((req, res) => {
+  const { method } = req;
+  switch (method) {
+    case "GET":
+      return manejarSolicitudGET(req, res);
+    default:
+      console.log(`El método no puede ser manejado por el servidor: ${method}`);
+  }
+});
+
+function manejarSolicitudGET(req, res) {
+  const path = req.url;
+
+  if (path === "/") {
+    res.statusCode = 200;
+    return res.end("Bienvenidos a mi primer servidor y API creado con Node.js");
+  } else if (path === "/cursos") {
+    res.statusCode = 200;
+    return res.end(JSON.stringify(cursos.infoCursos));
+  } else if (path === "/cursos/programacion") {
+    res.statusCode = 200;
+    return res.end(JSON.stringify(cursos.infoCursos.programacion));
+  } else {
+    res.statusCode = 404;
+    return res.end("El recurso solicitado no existe");
+  }
+}
+
+servidor.listen(PORT, () => {
+  console.log(`Servidor escuchando en puerto ${PORT}...`);
+});
+```
+
+Para manejar más tipos de solicitudes, como POST, por ejemplo, simplemente agregaríamos más funciones de _manejarSolicitud_ seguida del tipo de solicitud que queramos manejar.
 
 # Capítulo 6: Nodemon
 
 [Volver al Índice](#índice)
 
-Escribir
+**Nodemon** es una herramienta que reinicia la aplicación de Node cuando detecta algún cambio en los archivos. Esto nos permitirá que el servidor se reinicie de forma automática y automáticamente podamos ver los cambios que implementamos, sin necesidad de estar parando y reiniciando el servidor. Para instalarlo, debemos ejecutar el comando siguiente en el terminal: `npm install -g nodemon`. La **-g** hará que nodemon se instale como un comando global, pudiendo ser utilizado en todos los proyectos que lo necesitemos, y, para usarlo, en el terminal escribiremos `nodemon app.js`, o con el nombre del archivo que estemos utilizando.
 
 # Capítulo 7: Express
 
 [Volver al Índice](#índice)
 
-Escribir
-
 ## 7.1 Introducción a Express
 
 [Volver al Índice](#índice)
 
-Escribir
+**Express** es el framework web más populas de Node.js, que permite desarrollar servidores de forma mucho más sencilla. Al 01/05/2024, cuenta con más de 29 millones de descargas. Su propóstio principal es ayudar a desarrollar aplicaciones con Node.js, por lo cual, entre sus **características**, encontramos que:
+
+- Simplifica el Routing.
+- Está enfocado en proveer un alto rendimiento.
+- ermite desarrollar aplicaciones de Node.js más rápidamente, con código más conciso.
 
 ## 7.2 Conceptos importantes
 
 [Volver al Índice](#índice)
 
-Escribir
+- **CRUD**: Es un acrónimo para _Create, Read, Update y Delete_, un conjunto de operaciones básicas que se pueden realizar con la información que tenemos almacenada.
+- **APIs**: Es un acrónimo que significa _Aplication Programming Interface_. Son herramientas o interfaces programadas para interactuar con una base de datos, que permiten que dos o más programas se comuniquen entre sí. Esto nos permite que un software ofrezca servicios a otro software. No se usan directamente por el usuario, sino que las usa el programador para implementar el programa de la API en su programa. Normalmente trabajan en formato JSON.
+- **REST**: Es un estilo de arquitectura de software para sistemas hipermedia distribuidos, como lo es la World Wide Web.
+- **RESTful API** Es una API basada en REST.
+- **middleware**: Es un software con el que las diferentes aplicaciones se comunican entre sí, que puede trabajar como una funcionalidad intermedia para ciertos procesos de la aplicación, tales como la validación de datos cargados por el usuario o el control de los permisos de acceso del mismo. Esto permite modularizar esas pequeñas funcionalidades, desarrollando así aplicaciones de manera más eficiente e inteligente, además de poder innovar más fácil y rápidamente sobre las mismas.
 
 ## 7.3 Crear un proyecto con Express
 
 [Volver al Índice](#índice)
 
-Escribir
+Para crear un nuevo proyecto con Express, luego de instalarlo en la carpeta correspondiente, debemos colocar las siguientes líneas:
+
+```javascript
+const express = require("express");
+const app = express();
+const { infoCursos } = require("./cursos");
+```
+
+**app** será la que tendrá todas las funcionalidades de Express que necesitaremos para trabajar. Como podemos ver, también usaremos la pequeña BDD de cursos que habíamos definido anteriomente.
 
 ## 7.4 Primeros pasos con Express
 
 [Volver al Índice](#índice)
 
-Escribir
+Luego de cargar Express en nuestro entry point, debemos configurar el servidor para que esté escuchando. Para eso, agregamos las siguientes líneas a continuación de las que ya teníamos:
+
+```javascript
+const PORT = process.env.PORT || 3000;
+// process.env.PORT buscará en el ambiente a ver si se asignó o definió un puerto (Etapa de producción), y, si no, le asignará el puerto 3000
+
+app.get("/", (req, res) => {
+  res.send("Mi primer servidor. Cursos 💻.");
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}...`);
+});
+```
 
 ## 7.5 Agregar rutas en Express
 
 [Volver al Índice](#índice)
 
-Escribir
+Ahora, agregamos algunas rutas para mostrar el contenido de la BDD de cursos. En este caso, las colocamos debajo de la ruta **app.get('/')**, pero siempre encima del **app.listen**:
+
+```javascript
+app.get("/api/cursos", (req, res) => {
+  res.send(JSON.stringify(infoCursos));
+});
+
+app.get("/api/cursos/programacion", (req, res) => {
+  res.send(JSON.stringify(infoCursos.programacion));
+});
+
+app.get("/api/cursos/matematicas", (req, res) => {
+  res.send(JSON.stringify(infoCursos.matematicas));
+});
+```
 
 ## 7.6 Parámetros de Ruta
 
 [Volver al Índice](#índice)
 
-Escribir
+En caso de que quisieramos agregar parámetros para la búsqueda de ciertas vistas o archivos, podemos hacerlo del siguiente modo: Agregamos, debajo de cada 'paquete' de rutas las siguientes líneas de código:
+
+```javascript
+// Justo debajo de la ruta "/api/cursos/programacion"
+app.get("/api/cursos/programacion/:lenguaje", (req, res) => {
+  let lenguaje = req.params.lenguaje; // req.params nos permite acceder a los parámetros de la URL
+  const resultados = infoCursos.programacion.filter(
+    (curso) => curso.lenguaje === lenguaje
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${lenguaje}`);
+  }
+  res.send(JSON.stringify(resultados));
+});
+```
+
+```javascript
+// Justo debajo de la ruta "/api/cursos/matematicas"
+app.get("/api/cursos/matematicas/:tema", (req, res) => {
+  let tema = req.params.tema; // req.params nos permite acceder a los parámetros de la URL
+  const resultados = infoCursos.matematicas.filter(
+    (curso) => curso.tema === tema
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${tema}`);
+  }
+  res.send(JSON.stringify(resultados));
+});
+```
+
+Ahora, en caso de que quisieramos tener más parámetros de filtrado desde la URL, haríamos lo siguiente:
+
+```javascript
+app.get("/api/cursos/programacion/:lenguaje/:nivel", (req, res) => {
+  let lenguaje = req.params.lenguaje;
+  let nivel = req.params.nivel;
+  const resultados = infoCursos.programacion.filter(
+    (curso) => curso.lenguaje === lenguaje && curso.nivel === nivel
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res
+      .status(404)
+      .send(`No se encontraron cursos de ${lenguaje} de nivel ${nivel}`);
+  }
+  res.send(JSON.stringify(resultados));
+});
+```
+
+Deberíamos colocar esta ruta a continuación de _/api/cursos/programacion/:lenguaje_, y hacer lo mismo para el respectivo filtrado por nivel de los cursos de matemáticas del ejemplo que venimos trabajando.
 
 ## 7.7 Parámetros query
 
 [Volver al Índice](#índice)
 
-Escribir
+Como vimos, estos parámetros están incluidos al final de la URL. Estos parámetros pueden o no incluirse en la URL. Por ejemplo, si quisieramos ordenar los resultados en base a algún parámetro, como la cantidad de vistas, modificaríamos la función de búsqueda de cursos de programación del siguiente modo:
+
+```javascript
+app.get("/api/cursos/programacion/:lenguaje", (req, res) => {
+  let lenguaje = req.params.lenguaje; // req.params nos permite acceder a los parámetros de la URL
+  const resultados = infoCursos.programacion.filter(
+    (curso) => curso.lenguaje === lenguaje
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${lenguaje}`);
+  }
+
+  // Acá agregamos el ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+```
+
+Si quisieramos que esta funcionalidad esté persente en más rutas, bien podríamos agregarla a cada una de ellas, o bien crear una función de ordenamiento y luego implementarlas. Esta última opción sería la más óptima.
 
 ## 7.8 Routers en Express
 
 [Volver al Índice](#índice)
 
-Escribir
+Los **Routers** son muy utiles, dado que nos permiten reutilizar ciertas rutas, lo que nos permitirá crear una especie de ramificación de rutas. Así, por ejemplo, pdoríamos utilizar todas las rutas de _/api/cursos/programacion_ en un solo router, y no tener que estarla repitiendo en cada uno de los _app.get_ que vamos declarando. Estos se suelen colocar en un archivo aparte, llamado **descripcionRoutes.js**, donde **descripción** sería el nombre de las rutas que contiene, por ejemplo, _cursosProgramacionRoutes.js_. Esta disposición en diferentes archivos se hace cuando se utiliza el **Modelo Vista Controlador**. En este caso, para mantener la sencilles de los ejemplos, se hará dentro del mismo código que veníamos trabajando. La modificación sería la siguiente:
+
+```javascript
+const routerProgramacion = express.Router(); // Creamos el router específico para programación
+app.use("/api/cursos/programacion", routerProgramacion); // Asignamos la ruta al router
+
+// Ruta principal
+app.get("/", (req, res) => {
+  res.send("Mi primer servidor. Cursos 💻.");
+});
+
+app.get("/api/cursos", (req, res) => {
+  res.send(JSON.stringify(infoCursos));
+});
+
+// Sección de rutas para cursos de programacion
+routerProgramacion.get("/", (req, res) => {
+  res.send(JSON.stringify(infoCursos.programacion));
+});
+
+routerProgramacion.get("/:lenguaje", (req, res) => {
+  let lenguaje = req.params.lenguaje; // req.params nos permite acceder a los parámetros de la URL
+  const resultados = infoCursos.programacion.filter(
+    (curso) => curso.lenguaje === lenguaje
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${lenguaje}`);
+  }
+
+  // Acá agregamos el ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+
+routerProgramacion.get("/:lenguaje/:nivel", (req, res) => {
+  let lenguaje = req.params.lenguaje;
+  let nivel = req.params.nivel;
+  const resultados = infoCursos.programacion.filter(
+    (curso) => curso.lenguaje === lenguaje && curso.nivel === nivel
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res
+      .status(404)
+      .send(`No se encontraron cursos de ${lenguaje} de nivel ${nivel}`);
+  }
+
+  // Ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+```
+
+### 7.8.1 Estado del archivo hasta el momento
+
+Hasta ahora, en base a lo que venimos trabajando en nuestro archivo, todo su contenido sería el siguiente:
+
+```javascript
+const express = require("express");
+const app = express();
+const { infoCursos } = require("./cursos");
+const PORT = process.env.PORT || 3000;
+// process.env.PORT buscará en el ambiente a ver si se asignó o definió un puerto (Etapa de producción), y, si no, le asignará el puerto 3000
+
+// Routers
+const routerProgramacion = express.Router(); // Creamos el router específico para programación
+app.use("/api/cursos/programacion", routerProgramacion); // Asignamos la ruta al router
+
+const routerMatematicas = express.Router(); // Creamos el router específico para programación
+app.use("/api/cursos/matematicas", routerMatematicas); // Asignamos la ruta al router
+
+// Ruta principal
+app.get("/", (req, res) => {
+  res.send("Mi primer servidor. Cursos 💻.");
+});
+
+app.get("/api/cursos", (req, res) => {
+  res.send(JSON.stringify(infoCursos));
+});
+
+// Sección de rutas para cursos de programacion
+routerProgramacion.get("/", (req, res) => {
+  res.send(JSON.stringify(infoCursos.programacion));
+});
+
+routerProgramacion.get("/:lenguaje", (req, res) => {
+  let lenguaje = req.params.lenguaje; // req.params nos permite acceder a los parámetros de la URL
+  const resultados = infoCursos.programacion.filter(
+    (curso) => curso.lenguaje === lenguaje
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${lenguaje}`);
+  }
+
+  // Acá agregamos el ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+
+routerProgramacion.get("/:lenguaje/:nivel", (req, res) => {
+  let lenguaje = req.params.lenguaje;
+  let nivel = req.params.nivel;
+  const resultados = infoCursos.programacion.filter(
+    (curso) => curso.lenguaje === lenguaje && curso.nivel === nivel
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res
+      .status(404)
+      .send(`No se encontraron cursos de ${lenguaje} de nivel ${nivel}`);
+  }
+
+  // Ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+
+// Sección de rutas para cursos de matemáticas
+
+routerMatematicas.get("/", (req, res) => {
+  res.send(JSON.stringify(infoCursos.matematicas));
+});
+
+routerMatematicas.get("/:tema", (req, res) => {
+  let tema = req.params.tema;
+  const resultados = infoCursos.matematicas.filter(
+    (curso) => curso.tema === tema
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${tema}`);
+  }
+
+  // Ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+
+routerMatematicas.get("/:tema/:nivel", (req, res) => {
+  let tema = req.params.tema;
+  let nivel = req.params.nivel;
+  const resultados = infoCursos.matematicas.filter(
+    (curso) => curso.tema === tema && curso.nivel === nivel
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${tema}`);
+  }
+
+  // Ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}...`);
+});
+```
 
 ## 7.9 Routers en distintos archivos
 
 [Volver al Índice](#índice)
 
-Escribir
+Para estructurar el proyecto, lo mejor es crear una carpeta llamada **routers**, en la cual deberemos crear archivos para cada rama de rutas (en nuestro ejemplo, _routesProgramación.js_ y _routesMatemáticas.js_), y dentro de cada uno de ellos deberemos crear la aplicación Express tal cual vimos, colocando dentro suyo las distintas rutas que veníamos creando, y exportando luego las aplicaciones para poder utilizarlas en el entry point.
+
+```javascript
+// app.js
+const express = require("express");
+const app = express();
+const { infoCursos } = require("./datos/cursos");
+const PORT = process.env.PORT || 3000;
+
+// Routers
+const routerProgramacion = require("./routers/rutasProgramacion");
+const routerMatematicas = require("./routers/rutasMatematicas");
+app.use("/api/cursos/programacion", routerProgramacion);
+app.use("/api/cursos/matematicas", routerMatematicas);
+
+// Ruta principal
+app.get("/", (req, res) => {
+  res.send("Mi primer servidor. Cursos 💻.");
+});
+
+app.get("/api/cursos", (req, res) => {
+  res.send(JSON.stringify(infoCursos));
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}...`);
+});
+```
+
+```javascript
+// rutasProgramacion.js
+const express = require("express");
+const { programacion } = require("../datos/cursos").infoCursos;
+
+const routerProgramacion = express.Router();
+
+routerProgramacion.get("/", (req, res) => {
+  res.send(JSON.stringify(programacion));
+});
+
+routerProgramacion.get("/:lenguaje", (req, res) => {
+  let lenguaje = req.params.lenguaje; // req.params nos permite acceder a los parámetros de la URL
+  const resultados = programacion.filter(
+    (curso) => curso.lenguaje === lenguaje
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res.status(404).send(`No se encontraron cursos de ${lenguaje}`);
+  }
+
+  // Acá agregamos el ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+
+routerProgramacion.get("/:lenguaje/:nivel", (req, res) => {
+  let lenguaje = req.params.lenguaje;
+  let nivel = req.params.nivel;
+  const resultados = programacion.filter(
+    (curso) => curso.lenguaje === lenguaje && curso.nivel === nivel
+  );
+
+  // Ahora creamos un condicional para el manejo de errores
+  if (resultados.length === 0) {
+    return res
+      .status(404)
+      .send(`No se encontraron cursos de ${lenguaje} de nivel ${nivel}`);
+  }
+
+  // Ordenamiento
+  if (req.query.ordenar === "vistas") {
+    // req.query nos permite obtener las query strings
+    return res.send(
+      JSON.stringify(resultados.sort((a, b) => a.vistas - b.vistas)) // Ordenamos de forma ascendente
+    );
+  } else {
+    return res.send(JSON.stringify(resultados));
+  }
+});
+
+module.exports = routerProgramacion;
+```
+
+A fines de no extender más el código, se aclara que, aunque no se incluya el archivo, lo mismo se hizo con _rutasMatematicas.js_. Nótese también que se cambió la ubicación de _cursos.js_ a la carpeta _datos_.
+
+### 7.9.1 Controllers
+
+Siguiendo el **patrón Modelo Vista Controlador**, podríamos crear otra carpeta, llamada **controller**, en la cual crearíamos los archivos de los controladores correspondientes (en nuestro ejemplo, _programaciónController.js_ y _matemáticasController.js_), y dentro de cada uno de ellos, en un objeto literal, crear las distintas funciones para cada una de las rutas que deseemos trabajar. Por último, deberemos también exportar los controllers.
+
+### 7.9.2 Uso según el patrón MVC
+
+Para poder hacer uso de la estructura de archivos del **Patrón M-V-C**, lo que deberemos hacer será, de primeras, requerir los controladores en los archivos de rutas, y luego crear los **router.get** (o cualquier otro método que utilicemos) que necesitemos, y asignarle a cada uno de ellos las funciones que necesitamos desde el controller.
+
+Por ultimo, debemos requerir los archivos de ruta en el entry point, y con el uso de los **app.use**, crear los routers correspondientes, tal cual lo vimos anteriormente.
+
+Así, tendremos un programa mucho más modularizado, que nos permitirá, por un lado, tener una mucho más facil lectura e interpretación del código, y, por otro, facilitará el mantenimiento, las mejoras y la innovación en las diferentes secciones del código, ya que, supongamos, si fallan las rutas hacia los cursos de programación, en vez de revisar cientos o miles de líneas de código, simplemente deberemos buscar el archivo de rutas de programación, modificar lo que haga falta, y listo, mucho más sencillo.
 
 ## 7.10 POST, PUT, PATCH y DELETE
 
 [Volver al Índice](#índice)
 
-Escribir
+Ahora veremos como implementar los distintos métodos de programación. Partiremos de la base del proyecto anterior. Para fines prácticos, solo trabajaremos sobre el archivo _rutasProgramacion.js_, pero se da a entender que se deberá hacer lo mismo en todos los archivos de rutas del proyecto.
+
+### 7.10.1 Método POST
+
+Trabajaremos ahora en el archivo _rutasProgramacion.js_. Lo primero que haremos será incluir esta línea, a continuación de la línea en que definirmos _const routerProgramacion_: `routerProgramacion.use(express.json());`. Esto nos permitirá procesar el cuerpo de la solicitud y trabajar con él. Luego, hacemos la siguiente modificación debajo del último enrutador GET que teníamos:
+
+```javascript
+// Agregar un nuevo curso
+routerProgramacion.post("/", (req, res) => {
+  let cursoNuevo = req.body;
+  programacion.push(cursoNuevo);
+  res.send(JSON.stringify(programacion));
+});
+```
+
+Para hacer el envío de la modificación, colocamos las siguientes líneas en un archivo llamado _index.http_, dentro de la ruta raíz del proyecto. Esto nos permitirá ver, con una extensión, qué retorna como respuesta la solicitud:
+
+```javascript
+POST http://localhost:3000/api/cursos/programacion HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": 4,
+    "titulo": "Aprende Node.js",
+    "lenguaje": "javascript",
+    "vistas": 45676,
+    "nivel": "basico"
+}
+```
+
+### 7.10.2 Método PUT
+
+Este método nos permite actualizar entidades de la BDD. Con este método se debe enviar los datos completos de la entidad, y solo se modificaran los que se hayan cambiado. Debemos trabajarlo del siguiente modo:
+
+```javascript
+// Modificar los datos de un curso
+routerProgramacion.put("/:id", (req, res) => {
+  const cursoActualizado = req.body;
+  const id = req.params.id;
+  // Buscamos el curso según el índice que nos retornen
+  const indice = programacion.findIndex((curso) => (curso.id = id));
+
+  // Si se encontró el índice, se modifican los datos del curso
+  if (indice >= 0) {
+    programacion[indice] = cursoActualizado;
+    res.send(JSON.stringify(programacion));
+  }
+});
+```
+
+Para ver la respuesta de la solicitud, nuevamente colocamos en el archivo _index.http_ lo siguiente:
+
+```javascript
+PUT http://localhost:3000/api/cursos/programacion/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": 2,
+    "titulo": "Python intermedio con proyectos",
+    "lenguaje": "python",
+    "vistas": 123996,
+    "nivel": "intermedio",
+}
+```
+
+<blockquote>Esta parte me estaba dando un error. Recuerdo que los profes nos comentaron que había algun error o problema con los métodos PUT, PATCH y DELETE. Revisar más adelante.</blockquote>
+
+### 7.10.3 Método PATCH
+
+Este método nos permite enviar información parcial para una determinada entidad. El código sería:
+
+```javascript
+routerProgramacion.patch("/:id", (req, res) => {
+  const infoActualizada = req.params.id;
+
+  const indice = programacion.findIndex((curso) => curso.id == id);
+
+  if (indice >= 0) {
+    const cursoAModificar = programacion[indice];
+    Object.assign(cursoAModificar, infoActualizada);
+  }
+  res.send(JSON.stringify(programacion));
+});
+```
+
+Para ver la respuesta de la solicitud, en _index.http_ pondríamos:
+
+```javascript
+PATCH http://localhost:3000/api/cursos/programacion/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "titulo": "Python intermedio con proyectos",
+    "vistas": 123996,
+}
+```
+
+<blockquote>Me da el mismo error que el anterior. Deberé revisar los programas ya creados y corregir estos problemas luego.</blockquote>
+
+### 7.10.3 Método DELETE
+
+Para eliminar una entidad, deberíamos hacer la siguiente sucesión de código:
+
+```javascript
+routerProgramacion.delete("/:id", (req, res) => {
+  const id = req.params.id;
+  const indice = proramacion.findIndexcurso((curso) => curso.id == id);
+  if (indice >= 0) {
+    programacion.splice(indice, 1);
+  }
+  res.send(JSON.stringify(programacion));
+  // También se podría enviar como _res.json(programacion)_
+});
+```
+
+En cuanto a ver la respuesta de la solicitud, en _index.http_ haríamos:
+
+```javascript
+DELETE http://localhost:3000/api/cursos/programacion/2 HTTP/1.1
+```
+
+<blockquote>Me da el mismo error que el anterior. Deberé revisar los programas ya creados y corregir estos problemas luego.</blockquote>
